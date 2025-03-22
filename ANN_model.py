@@ -29,9 +29,7 @@ corr_matrix = pandas.DataFrame(d0).corr()
 target_correlations = corr_matrix[0].iloc[1:]
 
 # Select features with highest absolute correlation but keep original sign info
-print("\nTop Feature Correlations with Target Variable (with direction):")
 sorted_correlations = target_correlations.abs().sort_values(ascending=False)
-print(target_correlations.loc[sorted_correlations.nlargest(10).index])
 
 # Define polynomial combinations to try
 poly_combinations = {
@@ -208,12 +206,12 @@ bar_width = 0.25
 opacity = 0.8
 colors = plt.cm.tab10.colors
 
-# Plot R² for each feature count
+# Plot MSE for each feature count
 for i, feature_count in enumerate([2, 3, 4]):
-    r2_values = [all_results[feature_count]['results'][combo]['r2'] for combo in poly_combinations]
+    mse_values = [all_results[feature_count]['results'][combo]['mse'] for combo in poly_combinations]
     plt.bar(
         x_pos + i*bar_width,
-        r2_values,
+        mse_values,
         bar_width,
         alpha=opacity,
         color=colors[i],
@@ -222,8 +220,8 @@ for i, feature_count in enumerate([2, 3, 4]):
 
 # Add labels and styling
 plt.xlabel('Polynomial Combination')
-plt.ylabel('R² Score')
-plt.title('R² Comparison by Feature Count and Polynomial Combination')
+plt.ylabel('Mean Squared Error (MSE)')
+plt.title('MSE Comparison by Feature Count and Polynomial Combination')
 plt.xticks(x_pos + bar_width, poly_combinations.keys(), rotation=45)
 plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
 plt.grid(axis='y', linestyle='--', alpha=0.7)
